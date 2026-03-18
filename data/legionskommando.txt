@@ -1,16 +1,6 @@
-Michi|Puppe besorgen/mitnehmen
-Michi|Puppe Tinder Profil
-Michi|Mönchsköstüm
-Michi|Andy Samberg - Jack Sparrow Text ausdrucken
-Michi|Trichter
-Michi|KI Treuegelübte
-Pauli|Spießgriller
-Pauli|Wiaschtlkocher
-Pauli|Durchlaufkühler
-Pauli|Mönchsköstüm
-Thomas|Box (Samstag Morgen)
-Thomas|Nonnenkostüm
+Michi|Puppe besorgen/mitnehmen, Puppe Tinder Profil, Mönchsköstüm, Andy Samberg - Jack Sparrow Text ausdrucken, Trichter, KI Treuegelübte
+Pauli|Spießgriller, Wiaschtlkocher, Durchlaufkühler, Mönchsköstüm
+Thomas|Musikbox, Nonnenkostüm
 Flo|Neandertalerkostüm, Einspruch bei Hochzeit
-Dennis|Body Shot Kandidat
-Dennis|Peniszepter
+Dennis|Body Shot Kandidat, Peniszepter
 Manfred|Motorradhelm
