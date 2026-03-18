@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kreuzzug Polterabend — Bruder Jakob, M3.030</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8D48B;
+    --gold-bright: #F5E6A3;
+    --gold-dark: #8A6D2B;
+    --crimson: #8B1A1A;
+    --crimson-light: #B32828;
+    --crimson-glow: rgba(139, 26, 26, 0.35);
+    --bg-void: #08070A;
+    --bg-panel: #0E0D12;
+    --bg-panel-hover: #141318;
+    --bg-surface: #1A181F;
+    --text-primary: #C8C0B0;
+    --text-secondary: #8A8272;
+    --text-muted: #5A5448;
+    --skull-white: #E8E2D6;
+    --border: #2A2622;
+    --border-gold: rgba(201, 168, 76, 0.3);
+    --border-crimson: rgba(139, 26, 26, 0.3);
+    --mechanicus-green: #3A7A4A;
+    --ultramar-blue: #2A4A8A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Crimson Pro', serif;
+    background: var(--bg-void);
+    color: var(--text-primary);
+    line-height: 1.75;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.6) 100%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .gothic-divider {
+    text-align: center; color: var(--gold-dark);
+    font-size: 1.2rem; letter-spacing: 12px;
+    margin: 8px 0; opacity: 0.5; user-select: none;
+  }
+
+  .hero {
+    position: relative; padding: 70px 40px 55px;
+    text-align: center; overflow: hidden;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .hero::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 50% 100%, var(--crimson-glow) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 0%, rgba(201, 168, 76, 0.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, transparent, var(--crimson), var(--gold), var(--crimson), transparent);
+  }
+
+  .imperial-sigil {
+    font-size: 2.5rem; margin-bottom: 12px; display: block;
+    filter: drop-shadow(0 0 20px rgba(201, 168, 76, 0.3));
+    animation: sigil-pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes sigil-pulse {
+    0%, 100% { filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.2)); }
+    50% { filter: drop-shadow(0 0 30px rgba(201, 168, 76, 0.5)); }
+  }
+
+  .hero-edict {
+    display: inline-block; font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 6px; text-transform: uppercase;
+    color: var(--crimson-light); border: 1px solid var(--border-crimson);
+    padding: 5px 22px; margin-bottom: 24px; animation: fadeDown 0.8s ease-out;
+  }
+
+  .hero h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.2rem, 6vw, 4.2rem);
+    font-weight: 900; line-height: 1.15;
+    text-transform: uppercase; letter-spacing: 4px;
+    background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 35%, var(--gold-dark) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 8px;
+    animation: fadeDown 0.8s ease-out 0.1s both;
+  }
+
+  .hero-subtitle {
+    font-family: 'Cinzel', serif; font-weight: 400; font-size: 1rem;
+    letter-spacing: 5px; text-transform: uppercase;
+    color: var(--text-secondary); margin-bottom: 6px;
+    animation: fadeDown 0.8s ease-out 0.2s both;
+  }
+
+  .hero-age {
+    font-family: 'Cinzel Decorative', serif; font-size: 1.6rem; font-weight: 700;
+    color: var(--crimson-light); margin-bottom: 28px;
+    animation: fadeDown 0.8s ease-out 0.25s both;
+    text-shadow: 0 0 30px var(--crimson-glow);
+  }
+
+  .hero-data {
+    display: flex; justify-content: center; gap: 36px; flex-wrap: wrap;
+    animation: fadeDown 0.8s ease-out 0.35s both;
+  }
+
+  .hero-datum { text-align: center; min-width: 100px; }
+
+  .hero-datum-label {
+    font-family: 'Share Tech Mono', monospace; font-size: 9px;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 3px;
+  }
+
+  .hero-datum-value {
+    font-family: 'Cinzel', serif; font-size: 1rem;
+    font-weight: 600; color: var(--skull-white);
+  }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 0 28px; }
+
+  .section { padding: 55px 0; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+
+  .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+
+  .section-icon {
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; background: var(--bg-surface);
+    border: 1px solid var(--gold-dark); border-radius: 2px;
+    flex-shrink: 0; position: relative;
+  }
+
+  .section-icon::before, .section-icon::after {
+    content: ''; position: absolute; width: 6px; height: 6px;
+    border-color: var(--gold-dark); border-style: solid;
+  }
+  .section-icon::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+  .section-icon::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+  .section-title {
+    font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 3px; color: var(--gold-light);
+  }
+
+  .section-subtitle {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.75rem;
+    color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase;
+  }
+
+  .fortress-card {
+    background: var(--bg-panel); border: 1px solid var(--border);
+    padding: 28px 30px; position: relative; overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .fortress-card:hover { border-color: var(--border-gold); }
+
+  .fortress-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent 5%, var(--crimson) 30%, var(--gold-dark) 50%, var(--crimson) 70%, transparent 95%);
+  }
+
+  .fortress-card::after {
+    content: ''; position: absolute;
+    top: 8px; left: 8px; right: 8px; bottom: 8px;
+    border: 1px solid rgba(201, 168, 76, 0.06); pointer-events: none;
+  }
+
+  .fortress-name {
+    font-family: 'Cinzel', serif; font-size: 1.25rem; font-weight: 700;
+    color: var(--skull-white); text-transform: uppercase;
+    letter-spacing: 2px; margin-bottom: 20px;
+  }
+
+  .fortress-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+  .fortress-detail { display: flex; flex-direction: column; gap: 3px; }
+
+  .fortress-detail-label {
+    font-family: 'Share Tech Mono', monospace; font-size: 9px;
+    letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-muted);
+  }
+
+  .fortress-detail-value { font-size: 0.95rem; color: var(--text-primary); }
+
+  .fortress-detail-value a {
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px dotted var(--gold-dark); transition: color 0.2s;
+  }
+  .fortress-detail-value a:hover { color: var(--gold-bright); }
+
+  .fortress-warning {
+    margin-top: 18px; padding: 10px 16px;
+    background: rgba(139, 26, 26, 0.08); border-left: 3px solid var(--crimson);
+    font-size: 0.88rem; color: var(--crimson-light); font-style: italic;
+  }
+
+  .timeline { position: relative; padding-left: 44px; }
+
+  .timeline::before {
+    content: ''; position: absolute; left: 14px; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(to bottom, var(--crimson), var(--gold-dark) 30%, var(--border) 70%, var(--crimson));
+  }
+
+  .timeline-day { margin-bottom: 50px; }
+  .timeline-day:last-child { margin-bottom: 0; }
+
+  .timeline-day-header {
+    position: relative; margin-bottom: 22px;
+    margin-left: -44px; padding-left: 44px;
+  }
+
+  .timeline-day-header::before {
+    content: ''; position: absolute; left: 4px; top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 22px; height: 22px; background: var(--bg-void);
+    border: 2px solid var(--crimson-light);
+    box-shadow: 0 0 14px var(--crimson-glow), inset 0 0 6px rgba(139, 26, 26, 0.2);
+  }
+
+  .timeline-day-title {
+    font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 4px; color: var(--gold-light);
+  }
+
+  .timeline-day-date {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.72rem;
+    color: var(--text-muted); letter-spacing: 2px;
+  }
+
+  .timeline-event {
+    position: relative; margin-bottom: 14px;
+    margin-left: -44px; padding-left: 44px;
+  }
+
+  .timeline-event::before {
+    content: ''; position: absolute; left: 11px; top: 16px;
+    width: 8px; height: 8px; background: var(--gold-dark);
+    border: 1px solid var(--gold); transform: rotate(45deg);
+    transition: all 0.25s;
+  }
+
+  .timeline-event:hover::before {
+    background: var(--gold); box-shadow: 0 0 10px rgba(201, 168, 76, 0.5);
+  }
+
+  .event-card {
+    background: var(--bg-panel); border: 1px solid var(--border);
+    padding: 16px 20px; transition: all 0.25s; cursor: default;
+  }
+
+  .event-card:hover {
+    background: var(--bg-panel-hover); border-color: var(--border-gold);
+    transform: translateX(4px);
+  }
+
+  .event-card.heresy {
+    border-color: var(--crimson); background: rgba(139, 26, 26, 0.08);
+    box-shadow: 0 0 20px rgba(139, 26, 26, 0.15);
+  }
+
+  .event-title {
+    font-family: 'Cinzel', serif; font-weight: 600; font-size: 0.92rem;
+    color: var(--skull-white); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 4px;
+  }
+
+  .event-card.heresy .event-title { color: var(--crimson-light); font-size: 1rem; letter-spacing: 2px; }
+  .event-card.heresy .event-detail { color: var(--crimson-light); }
+
+  .event-detail { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+
+  .event-tag {
+    display: inline-block; font-family: 'Share Tech Mono', monospace;
+    font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 3px 10px; margin-top: 8px; border: 1px solid;
+  }
+
+  .tag-action   { border-color: var(--gold-dark); color: var(--gold); background: rgba(201, 168, 76, 0.06); }
+  .tag-food     { border-color: rgba(58, 122, 74, 0.4); color: var(--mechanicus-green); background: rgba(58, 122, 74, 0.06); }
+  .tag-game     { border-color: rgba(42, 74, 138, 0.4); color: var(--ultramar-blue); background: rgba(42, 74, 138, 0.06); }
+  .tag-surprise { border-color: var(--border-crimson); color: var(--crimson-light); background: rgba(139, 26, 26, 0.06); }
+  .tag-ceremony { border-color: rgba(160, 100, 180, 0.3); color: #B080C8; background: rgba(160, 100, 180, 0.06); }
+
+  .phase-block { margin-bottom: 26px; }
+
+  .phase-label {
+    font-family: 'Cinzel', serif; font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 4px; text-transform: uppercase; color: var(--crimson-light);
+    margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+  }
+
+  .loadout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+
+  .loadout-card {
+    background: var(--bg-panel); border: 1px solid var(--border);
+    padding: 22px; transition: all 0.25s;
+  }
+  .loadout-card:hover { border-color: var(--border-gold); }
+
+  .loadout-card-title {
+    font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 2px; color: var(--gold-light);
+    margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+  }
+
+  .loadout-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+
+  .loadout-list li {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.9rem; color: var(--text-secondary);
+  }
+  .loadout-list li::before { content: '\25B8'; color: var(--crimson-light); font-size: 0.7rem; }
+
+  .loadout-note {
+    margin-top: 14px; padding: 8px 14px;
+    background: rgba(139, 26, 26, 0.06); border-left: 2px solid var(--crimson);
+    font-size: 0.82rem; color: var(--text-secondary); font-style: italic;
+  }
+
+  .wargear-list { list-style: none; display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .wargear-list.two-col { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+  .wargear-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 11px 16px; background: var(--bg-panel);
+    border: 1px solid var(--border); font-size: 0.92rem; transition: all 0.2s;
+  }
+  .wargear-list li:hover { border-color: var(--border-gold); background: var(--bg-panel-hover); }
+  .wargear-list li::before { content: '\2726'; color: var(--gold-dark); font-size: 0.7rem; margin-top: 4px; flex-shrink: 0; }
+
+  .wargear-text { color: var(--text-primary); }
+  .wargear-note { display: block; font-size: 0.78rem; color: var(--text-muted); font-style: italic; margin-top: 2px; }
+
+  .wargear-heading {
+    font-family: 'Cinzel', serif; font-weight: 600; font-size: 1rem;
+    text-transform: uppercase; letter-spacing: 2px; color: var(--gold);
+    margin-bottom: 14px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+
+  .strategium-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+
+  .strategium-chip {
+    padding: 11px 16px; background: var(--bg-panel);
+    border: 1px solid var(--border); font-size: 0.88rem;
+    color: var(--text-secondary); transition: all 0.2s; cursor: default;
+  }
+
+  .strategium-chip:hover {
+    border-color: var(--border-gold); color: var(--skull-white);
+    background: var(--bg-panel-hover); transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+  .strategium-chip .s-icon { margin-right: 8px; }
+
+  .order-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 13px 18px; background: var(--bg-panel);
+    border: 1px solid var(--border); border-left: 3px solid var(--crimson);
+    margin-bottom: 8px; font-size: 0.92rem; color: var(--text-primary); transition: all 0.2s;
+  }
+  .order-item:hover { background: var(--bg-panel-hover); }
+  .order-item::before { content: '\2620'; color: var(--crimson-light); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  .requisition-empty {
+    text-align: center; padding: 36px; border: 1px dashed var(--border);
+    color: var(--text-muted); font-style: italic; font-size: 1rem;
+  }
+
+  .footer {
+    text-align: center; padding: 36px 28px;
+    border-top: 2px solid var(--border); position: relative;
+  }
+
+  .footer::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--crimson), var(--gold-dark), var(--crimson), transparent);
+  }
+
+  .footer-quote {
+    font-family: 'Cinzel', serif; font-style: italic;
+    font-size: 0.95rem; color: var(--gold-dark); margin-bottom: 6px;
+  }
+
+  .footer-seal {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
+  }
+
+  .loading-text {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.8rem;
+    color: var(--text-muted); letter-spacing: 1px; padding: 12px 0;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: translateY(0); } }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media print {
+    body { background: #fff; color: #1a1a1a; }
+    body::before { display: none; }
+    .hero h1 { -webkit-text-fill-color: #8A6D2B; }
+    .event-card, .wargear-list li, .loadout-card, .strategium-chip, .order-item, .fortress-card {
+      background: #f5f3ee; border-color: #ccc; color: #222;
+    }
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 50px 14px 36px; }
+    .hero h1 { letter-spacing: 1px; font-size: 2rem; }
+    .hero-subtitle { letter-spacing: 2px; font-size: 0.8rem; }
+    .hero-edict { letter-spacing: 3px; font-size: 8px; padding: 4px 14px; }
+    .hero-age { font-size: 1.2rem; }
+    .hero-data { gap: 16px; }
+    .hero-datum-value { font-size: 0.85rem; }
+    .container { padding: 0 14px; }
+    .section { padding: 36px 0; }
+    .section-title { font-size: 1.2rem; letter-spacing: 2px; }
+    .timeline { padding-left: 36px; }
+    .timeline-event { margin-left: -36px; padding-left: 36px; }
+    .timeline-day-header { margin-left: -36px; padding-left: 36px; }
+    .timeline-day-title { font-size: 1.1rem; letter-spacing: 2px; }
+    .fortress-grid { grid-template-columns: 1fr; }
+    .fortress-name { font-size: 1rem; letter-spacing: 1px; }
+    .loadout-grid { grid-template-columns: 1fr; }
+    .strategium-grid { grid-template-columns: 1fr; }
+    .phase-label { letter-spacing: 2px; font-size: 0.7rem; }
+    .event-title { font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="imperial-sigil">&#9876;</span>
+  <div class="hero-edict">Edikt des Imperators &bull; Klassifizierung: Verminus</div>
+  <h1>Kreuzzug<br>Polterabend</h1>
+  <p class="hero-subtitle">Bruder Jakob &mdash; Der Fall des letzten freien Kriegers</p>
+  <div class="hero-age">Warhammer 30K &mdash; Er wird 30</div>
+  <div class="gothic-divider">+ + + + +</div>
+  <div class="hero-data">
+    <div class="hero-datum">
+      <div class="hero-datum-label">Kampagne</div>
+      <div class="hero-datum-value">20.&ndash;22.04.026</div>
+    </div>
+    <div class="hero-datum">
+      <div class="hero-datum-label">Kampfstärke</div>
+      <div class="hero-datum-value">18 Brüder</div>
+    </div>
+    <div class="hero-datum">
+      <div class="hero-datum-label">Einsatzgebiet</div>
+      <div class="hero-datum-value">Tschechien</div>
+    </div>
+    <div class="hero-datum">
+      <div class="hero-datum-label">Status</div>
+      <div class="hero-datum-value">Planung</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- I. FESTUNG -->
+<section class="section reveal">
+  <div class="section-header">
+    <div class="section-icon">&#9963;</div>
+    <div>
+      <div class="section-title">Die Festung</div>
+      <div class="section-subtitle">Hauptquartier der Kampagne</div>
+    </div>
+  </div>
+  <div class="fortress-card">
+    <div class="fortress-name">Star&eacute; M&#283;sto pod Land&scaron;tejnem</div>
+    <div class="fortress-grid">
+      <div class="fortress-detail">
+        <span class="fortress-detail-label">Anmarsch</span>
+        <span class="fortress-detail-value">2 Std. 39 Min.</span>
+      </div>
+      <div class="fortress-detail">
+        <span class="fortress-detail-label">Tribut Gesamt</span>
+        <span class="fortress-detail-value">1.585 &euro;</span>
+      </div>
+      <div class="fortress-detail">
+        <span class="fortress-detail-label">Tribut / Krieger</span>
+        <span class="fortress-detail-value">~93 &euro; (bei 17)</span>
+      </div>
+      <div class="fortress-detail">
+        <span class="fortress-detail-label">Max. Garnison</span>
+        <span class="fortress-detail-value">20 &ndash; 30</span>
+      </div>
+      <div class="fortress-detail">
+        <span class="fortress-detail-label">Astropathische Verbindung</span>
+        <span class="fortress-detail-value"><a href="https://www.airbnb.at/rooms/1093964931900367847?adults=16&check_in=2026-04-20&check_out=2026-04-22" target="_blank">Airbnb-Link &#8599;</a></span>
+      </div>
+    </div>
+    <div class="fortress-warning">&#9888; Haus gegenüber mit vermieteten Apartments &mdash; Lautstärke-Disziplin beachten!</div>
+  </div>
+</section>
+
+<!-- II. KAMPFPLAN -->
+<section class="section reveal">
+  <div class="section-header">
+    <div class="section-icon">&#9876;</div>
+    <div>
+      <div class="section-title">Kampfplan</div>
+      <div class="section-subtitle">Chronologie des Kreuzzugs</div>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="timeline-day">
+      <div class="timeline-day-header">
+        <div class="timeline-day-title">Tag I &mdash; Freitag</div>
+        <div class="timeline-day-date">20. April 2026 &bull; Mobilisierung</div>
+      </div>
+      <div class="timeline-events" id="freitag-events"><div class="loading-text">Lade Befehle...</div></div>
+    </div>
+    <div class="timeline-day">
+      <div class="timeline-day-header">
+        <div class="timeline-day-title">Tag II &mdash; Samstag</div>
+        <div class="timeline-day-date">21. April 2026 &bull; Hauptangriff</div>
+      </div>
+      <div class="phase-block">
+        <div class="phase-label">&#9788; Phase I &mdash; Morgendämmerung</div>
+        <div class="timeline-events" id="samstag-morgen-events"><div class="loading-text">Lade Befehle...</div></div>
+      </div>
+      <div class="phase-block">
+        <div class="phase-label">&#9760; Phase II &mdash; Poltern im Poltern</div>
+        <div class="timeline-events" id="samstag-poltern-events"><div class="loading-text">Lade Befehle...</div></div>
+      </div>
+      <div class="phase-block">
+        <div class="phase-label">&#9764; Phase III &mdash; Die Heilige Hochzeit</div>
+        <div class="timeline-events" id="samstag-hochzeit-events"><div class="loading-text">Lade Befehle...</div></div>
+      </div>
+    </div>
+    <div class="timeline-day">
+      <div class="timeline-day-header">
+        <div class="timeline-day-title">Tag III &mdash; Sonntag</div>
+        <div class="timeline-day-date">22. April 2026 &bull; Rückzug</div>
+      </div>
+      <div class="timeline-events" id="sonntag-events"><div class="loading-text">Lade Befehle...</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- III. RÜSTKAMMER -->
+<section class="section reveal">
+  <div class="section-header">
+    <div class="section-icon">&#9873;</div>
+    <div>
+      <div class="section-title">Rüstkammer</div>
+      <div class="section-subtitle">Kampfausrüstung &amp; Verkleidung</div>
+    </div>
+  </div>
+  <div class="loadout-grid">
+    <div class="loadout-card">
+      <div class="loadout-card-title">Jakob &mdash; Hauptrüstung</div>
+      <ul class="loadout-list" id="outfit-jakob"></ul>
+    </div>
+    <div class="loadout-card">
+      <div class="loadout-card-title">Jakob &mdash; Samstag Morgen</div>
+      <ul class="loadout-list" id="outfit-jakob-samstag"></ul>
+    </div>
+    <div class="loadout-card">
+      <div class="loadout-card-title">Ordensbrüder &mdash; Kostüme</div>
+      <ul class="loadout-list" id="outfit-gruppe"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- IV. KRIEGSAUSRÜSTUNG -->
+<section class="section reveal">
+  <div class="section-header">
+    <div class="section-icon">&#9881;</div>
+    <div>
+      <div class="section-title">Kriegsausrüstung</div>
+      <div class="section-subtitle">Packlisten der Kompanien</div>
+    </div>
+  </div>
+  <div class="wargear-heading">Jakob (muss in Koffer/Handgepäck passen!)</div>
+  <ul class="wargear-list" id="packliste-jakob" style="margin-bottom: 28px;"></ul>
+</section>
+
+<!-- IV-B. LEGIONSKOMMANDO -->
+<section class="section reveal">
+  <div class="section-header">
+    <div class="section-icon">&#9812;</div>
+    <div>
+      <div class="section-title">Legionskommando</div>
+      <div class="section-subtitle">Wer bringt was mit &amp; wer ist wof&uuml;r zust&auml;ndig</div>
+    </div>
+  </div>
+  <div class="loadout-grid" id="legionskommando-grid"></div>
+</section>
+
+<!-- V. STRATEGIUM -->
+<section class="section reveal">
+  <div class="section-header">
+    <div class="section-icon">&#9733;</div>
+    <div>
+      <div class="section-title">Strategium</div>
+      <div class="section-subtitle">Taktische Optionen &mdash; noch nicht final</div>
+    </div>
+  </div>
+  <div class="strategium-grid" id="ideen-grid"></div>
+</section>
+
+<!-- VI. BEFEHLE -->
+<section class="section reveal">
+  <div class="section-header">
+    <div class="section-icon">&#9760;</div>
+    <div>
+      <div class="section-title">Befehle der Inquisition</div>
+      <div class="section-subtitle">Offene Aufträge</div>
+    </div>
+  </div>
+  <div id="todo-list"></div>
+</section>
+
+<!-- VII. REQUISITION -->
+<section class="section reveal">
+  <div class="section-header">
+    <div class="section-icon">&#9878;</div>
+    <div>
+      <div class="section-title">Requisitionsmanifest</div>
+      <div class="section-subtitle">Einkaufslisten</div>
+    </div>
+  </div>
+  <div class="wargear-heading">Essen</div>
+  <div id="einkauf-essen" style="margin-bottom: 28px;"></div>
+  <div class="wargear-heading">Getr&auml;nke</div>
+  <div id="einkauf-getraenke"></div>
+</section>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-quote">&bdquo;Was auf dem Kreuzzug geschieht, bleibt auf dem Kreuzzug.&ldquo;</div>
+  <div class="gothic-divider" style="margin: 8px 0;">+ + +</div>
+  <div class="footer-seal">Gesiegelt im Namen des Imperators &bull; Bruder Jakob &bull; Warhammer 30K &bull; M3.026</div>
+</footer>
+
+<!--
+  DATA LOADER — All lists loaded from external .txt files in /data/ folder.
+
+  FILE FORMATS:
+  ─────────────
+  Timeline (freitag.txt, samstag-*.txt):
+    Title|Detail|Tag Label|Tag Type
+    Tag types: action, food, game, surprise, ceremony
+    Lines starting with "!!!" get the "heresy" red highlight
+
+  Outfit (outfit-*.txt):
+    Item Name
+    Item Name|Note text
+
+  Packlist (packliste-*.txt):
+    Item Name
+    Item Name|Note text
+
+  Ideas (ideen.txt):
+    Emoji|Description
+
+  Todo (todo.txt):
+    One task per line
+
+  Einkaufsliste (einkaufsliste.txt):
+    One item per line, or Item|Note
+    Empty file = shows "TBD" placeholder
+-->
+<script>
+  // ── Helpers ──
+  function parseLines(text) {
+    return text.split('\n').map(function(l) { return l.trim(); }).filter(function(l) { return l.length > 0; });
+  }
+
+  async function loadFile(name) {
+    try {
+      var r = await fetch('data/' + name + '.txt?_=' + Date.now());
+      if (!r.ok) return [];
+      return parseLines(await r.text());
+    } catch (e) { return []; }
+  }
+
+  // ── Safe DOM builders (no innerHTML) ──
+
+  function buildTimelineEvent(line) {
+    var parts = line.split('|');
+    var rawTitle = parts[0] || '';
+    var detail = parts[1] || '';
+    var tagLabel = parts[2] || '';
+    var tagType = parts[3] || 'action';
+    var isHeresy = rawTitle.startsWith('!!!');
+    var title = isHeresy ? rawTitle.replace(/^!+\s*/, '') : rawTitle;
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'timeline-event';
+
+    var card = document.createElement('div');
+    card.className = 'event-card' + (isHeresy ? ' heresy' : '');
+
+    var titleEl = document.createElement('div');
+    titleEl.className = 'event-title';
+    titleEl.textContent = (isHeresy ? '\u2620 ' : '') + title;
+    card.appendChild(titleEl);
+
+    if (detail) {
+      var detailEl = document.createElement('div');
+      detailEl.className = 'event-detail';
+      detailEl.textContent = detail;
+      card.appendChild(detailEl);
+    }
+
+    if (tagLabel) {
+      var tag = document.createElement('span');
+      tag.className = 'event-tag tag-' + tagType;
+      tag.textContent = tagLabel;
+      card.appendChild(tag);
+    }
+
+    wrapper.appendChild(card);
+    return wrapper;
+  }
+
+  function renderTimeline(containerId, items) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.textContent = '';
+    items.forEach(function(line) {
+      el.appendChild(buildTimelineEvent(line));
+    });
+  }
+
+  function renderLoadout(containerId, items) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.textContent = '';
+    var notes = [];
+    items.forEach(function(line) {
+      var parts = line.split('|');
+      var li = document.createElement('li');
+      li.textContent = parts[0];
+      el.appendChild(li);
+      if (parts[1]) notes.push(parts[1]);
+    });
+    if (notes.length > 0) {
+      var parent = el.closest('.loadout-card');
+      if (parent && !parent.querySelector('.loadout-note')) {
+        var noteEl = document.createElement('div');
+        noteEl.className = 'loadout-note';
+        noteEl.textContent = notes.join(' \u2014 ');
+        parent.appendChild(noteEl);
+      }
+    }
+  }
+
+  function renderWargear(containerId, items) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.textContent = '';
+    items.forEach(function(line) {
+      var parts = line.split('|');
+      var li = document.createElement('li');
+      var span = document.createElement('span');
+      span.className = 'wargear-text';
+      span.textContent = parts[0];
+      if (parts[1]) {
+        var note = document.createElement('span');
+        note.className = 'wargear-note';
+        note.textContent = parts[1];
+        span.appendChild(note);
+      }
+      li.appendChild(span);
+      el.appendChild(li);
+    });
+  }
+
+  function renderIdeen(containerId, items) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.textContent = '';
+    items.forEach(function(line) {
+      var parts = line.split('|');
+      var chip = document.createElement('div');
+      chip.className = 'strategium-chip';
+      var icon = document.createElement('span');
+      icon.className = 's-icon';
+      icon.textContent = parts[0];
+      chip.appendChild(icon);
+      chip.appendChild(document.createTextNode(' ' + (parts[1] || parts[0])));
+      el.appendChild(chip);
+    });
+  }
+
+  function renderTodo(containerId, items) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.textContent = '';
+    items.forEach(function(line) {
+      var div = document.createElement('div');
+      div.className = 'order-item';
+      div.textContent = line;
+      el.appendChild(div);
+    });
+  }
+
+  function renderLegionskommando(containerId, items) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.textContent = '';
+    items.forEach(function(line) {
+      var parts = line.split('|');
+      var name = parts[0];
+      var tasks = parts[1] || '';
+
+      var card = document.createElement('div');
+      card.className = 'loadout-card';
+
+      var title = document.createElement('div');
+      title.className = 'loadout-card-title';
+      title.textContent = name;
+      card.appendChild(title);
+
+      if (tasks) {
+        var ul = document.createElement('ul');
+        ul.className = 'loadout-list';
+        tasks.split(',').forEach(function(task) {
+          var li = document.createElement('li');
+          li.textContent = task.trim();
+          ul.appendChild(li);
+        });
+        card.appendChild(ul);
+      }
+
+      el.appendChild(card);
+    });
+  }
+
+  function renderEinkauf(containerId, items) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.textContent = '';
+    if (items.length === 0) {
+      var placeholder = document.createElement('div');
+      placeholder.className = 'requisition-empty';
+      placeholder.textContent = 'Noch zu definieren \u2014 das Administratum wartet auf Eingaben';
+      el.appendChild(placeholder);
+    } else {
+      var ul = document.createElement('ul');
+      ul.className = 'wargear-list two-col';
+      items.forEach(function(line) {
+        var parts = line.split('|');
+        var li = document.createElement('li');
+        var span = document.createElement('span');
+        span.className = 'wargear-text';
+        span.textContent = parts[0];
+        if (parts[1]) {
+          var note = document.createElement('span');
+          note.className = 'wargear-note';
+          note.textContent = parts[1];
+          span.appendChild(note);
+        }
+        li.appendChild(span);
+        ul.appendChild(li);
+      });
+      el.appendChild(ul);
+    }
+  }
+
+  // ── Init ──
+  async function init() {
+    var data = await Promise.all([
+      loadFile('freitag'),
+      loadFile('samstag-morgen'),
+      loadFile('samstag-poltern'),
+      loadFile('samstag-hochzeit'),
+      loadFile('sonntag'),
+      loadFile('outfit-jakob'),
+      loadFile('outfit-jakob-samstag'),
+      loadFile('outfit-gruppe'),
+      loadFile('packliste-jakob'),
+      loadFile('legionskommando'),
+      loadFile('ideen'),
+      loadFile('todo'),
+      loadFile('einkauf-essen'),
+      loadFile('einkauf-getraenke')
+    ]);
+
+    renderTimeline('freitag-events', data[0]);
+    renderTimeline('samstag-morgen-events', data[1]);
+    renderTimeline('samstag-poltern-events', data[2]);
+    renderTimeline('samstag-hochzeit-events', data[3]);
+    renderTimeline('sonntag-events', data[4]);
+    renderLoadout('outfit-jakob', data[5]);
+    renderLoadout('outfit-jakob-samstag', data[6]);
+    renderLoadout('outfit-gruppe', data[7]);
+    renderWargear('packliste-jakob', data[8]);
+    renderLegionskommando('legionskommando-grid', data[9]);
+    renderIdeen('ideen-grid', data[10]);
+    renderTodo('todo-list', data[11]);
+    renderEinkauf('einkauf-essen', data[12]);
+    renderEinkauf('einkauf-getraenke', data[13]);
+  }
+
+  init();
+
+  // ── Scroll reveal ──
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+</script>
+
+</body>
+</html>
