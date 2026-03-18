@@ -425,13 +425,81 @@
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
   @media print {
-    body { background: #fff; color: #1a1a1a; }
+    /* ── Base ── */
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { background: #08070A; color: #C8C0B0; font-size: 11pt; }
     body::before { display: none; }
-    .hero h1 { -webkit-text-fill-color: #8A6D2B; }
-    .event-card, .wargear-list li, .loadout-card, .strategium-chip, .order-item, .fortress-card {
-      background: #f5f3ee; border-color: #ccc; color: #222;
+
+    /* ── Keep dark theme in PDF ── */
+    .hero { padding: 50px 30px 40px; border-bottom: 2px solid #2A2622; }
+    .hero::before, .hero::after { display: none; }
+    .hero h1 {
+      -webkit-text-fill-color: #C9A84C;
+      font-size: 2.8rem;
     }
-    .reveal { opacity: 1; transform: none; }
+    .hero-edict { border-color: rgba(139, 26, 26, 0.4); }
+    .hero-age { text-shadow: none; }
+    .imperial-sigil { animation: none; filter: none; }
+
+    /* ── No animations ── */
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .loading-text { display: none; }
+    @keyframes sigil-pulse { 0%, 100% { filter: none; } }
+
+    /* ── Sections: prevent orphaned headers ── */
+    .section { padding: 30px 0; break-inside: avoid-column; }
+    .section-header { break-after: avoid; }
+
+    /* ── Timeline: keep events together ── */
+    .timeline::before {
+      background: linear-gradient(to bottom, #8B1A1A, #8A6D2B 30%, #2A2622 70%, #8B1A1A);
+    }
+    .timeline-day { break-inside: avoid; }
+    .timeline-day-header { break-after: avoid; }
+    .timeline-event { break-inside: avoid; }
+    .event-card { break-inside: avoid; }
+    .event-card:hover { transform: none; }
+    .phase-block { break-inside: avoid; }
+
+    /* ── Cards: keep intact ── */
+    .fortress-card { break-inside: avoid; }
+    .loadout-card { break-inside: avoid; }
+    .loadout-grid { break-inside: avoid; }
+
+    /* ── Checklists: don't split items ── */
+    .wargear-list li { break-inside: avoid; }
+    .strategium-chip { break-inside: avoid; }
+    .order-item { break-inside: avoid; }
+
+    /* ── Strategium grid: readable columns ── */
+    .strategium-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* ── Page breaks between major sections ── */
+    .section:nth-child(n+3) { page-break-before: auto; }
+
+    /* ── Links: show URL ── */
+    .fortress-detail-value a::after {
+      content: ' (' attr(href) ')';
+      font-size: 7pt;
+      color: #8A8272;
+      word-break: break-all;
+    }
+
+    /* ── Footer ── */
+    .footer { border-top: 2px solid #2A2622; }
+    .footer::before { display: none; }
+
+    /* ── Hide hover effects ── */
+    .fortress-card:hover,
+    .event-card:hover,
+    .loadout-card:hover,
+    .wargear-list li:hover,
+    .strategium-chip:hover,
+    .order-item:hover {
+      transform: none;
+      border-color: inherit;
+      background: inherit;
+    }
   }
 
   @media (max-width: 600px) {
